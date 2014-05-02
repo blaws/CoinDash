@@ -13,6 +13,26 @@ class Ground(pygame.sprite.Sprite):
 	def tick(self):
 			self.rect = self.rect.move(self.xspeed, self.yspeed)
 
+class Runner(pygame.sprite.Sprite):
+	def __init__(self, gs = None):
+		pygame.sprite.Sprite.__init__(self)
+
+		self.gs = gs
+		self.image = pygame.image.load("images/Runner1.png")
+		self.animation = 0
+		self.rect = self.image.get_rect()
+		self.rect = self.rect.move(50, 290)
+
+	def tick(self):
+		self.animation += 1
+		animation = self.animation % 6
+		if animation == 0:
+			self.image = pygame.image.load("images/Runner1.png")
+		elif animation == 2:
+			self.image = pygame.image.load("images/Runner2.png")
+		elif animation == 4:
+			self.image = pygame.image.load("images/Runner3.png")
+
 class Guardian(pygame.sprite.Sprite):
 	def __init__(self, gs = None):
 		pygame.sprite.Sprite.__init__(self)
@@ -57,6 +77,7 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 
 		self.guardian = Guardian(self)
+		self.runner = Runner(self)
 		self.ground = list()
 		self.ground.append(Ground(self, 0, 360))
 		self.ground.append(Ground(self, 120, 360))
@@ -82,6 +103,7 @@ class GameSpace:
 						self.guardian.stopMove()
 
 			self.guardian.tick()
+			self.runner.tick()
 			for grounds in self.ground:
 				grounds.tick()
 				if grounds.rect.x <= -120:
@@ -91,6 +113,7 @@ class GameSpace:
 			self.screen.blit(self.backgroundImage, self.backgroundImageRect)
 			for grounds in self.ground:
 				self.screen.blit(grounds.image, grounds.rect)
+			self.screen.blit(self.runner.image, self.runner.rect)
 			self.screen.blit(self.guardian.image, self.guardian.rect)
 
 			pygame.display.flip()
