@@ -12,7 +12,10 @@ class PyTwist:
         pygame.init()
         self.size = self.width, self.height = 640, 480
         self.screen = pygame.display.set_mode(self.size)
-        self.background = 0, 0, 0
+        self.bg = pygame.image.load('images/Background.png').convert()
+        self.reverse_bg = pygame.transform.flip(self.bg, True, False)
+        self.bg_rect = self.bg.get_rect()
+        self.bg_speed = 4
         pygame.display.set_caption('PyTwist')
 
     def main(self):
@@ -28,15 +31,29 @@ class PyTwist:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     sys.exit()
-                elif event.type == KEYDOWN:
+                elif event.type == KEYUP or event.type == KEYDOWN:
                     if event.key == K_q or event.key == K_ESCAPE:
                         sys.exit()
+                    else:
+                        self.runner.input(event)
 
             # iterate game objects
+            self.runner.tick()
+            self.move_background()
 
             # display
-            self.screen.fill(self.background)
+            self.screen.blit(self.bg, self.bg_rect)
+            if self.bg_rect.right < self.width:
+                self.screen.blit(self.reverse_bg, self.bg_rect.move(self.width, 0))
+            else:
+                self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
+            self.screen.blit(self.runner.image, self.runner.rect)
             pygame.display.flip()
+
+    def move_background(self):
+        self.bg_rect = self.bg_rect.move(-self.bg_speed, 0)
+        if self.bg_rect.right <= 0:
+            self.bg_rect.left = self.width
 
 
 if __name__ == '__main__':
