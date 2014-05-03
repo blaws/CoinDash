@@ -51,10 +51,20 @@ class Guardian(pygame.sprite.Sprite):
 			self.image = pygame.image.load("images/InvisiblePlatform.png")
 			self.rect = self.rect.move(600 - self.rect.x, 230 - self.rect.y)
 
+	def input(self, event):
+		if event.type is pygame.KEYDOWN:
+			if event.key == pygame.K_w or event.key == pygame.K_s:
+				self.move(event.key)
+			elif event.key == pygame.K_RETURN:
+				self.makePlatform()
+		elif event.type is pygame.KEYUP:
+			if event.key == pygame.K_s or event.key == pygame.K_w:
+				self.stopMove()
+
 	def move(self, key):
-		if key == pygame.K_DOWN:
+		if key == pygame.K_s:
 			self.yspeed = 10
-		elif key == pygame.K_UP:
+		elif key == pygame.K_w:
 			self.yspeed = -10
 
 	def stopMove(self):
@@ -62,7 +72,7 @@ class Guardian(pygame.sprite.Sprite):
 
 	def makePlatform(self):
 		self.image = pygame.image.load("images/Platform.png")
-		self.xspeed = -10
+		self.xspeed = -5
 
 class GameSpace:
 	def main(self):

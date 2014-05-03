@@ -6,6 +6,7 @@ import sys
 import pygame
 from pygame.locals import *
 from Runner import Runner
+from Guardian import Guardian
 
 class PyTwist:
     def __init__(self):
@@ -22,6 +23,7 @@ class PyTwist:
         # game objects
         self.clock = pygame.time.Clock()
         self.runner = Runner(self)
+	self.guardian = Guardian(self)
 
         # game loop
         while 1:  # will be replaced by a function call later, to integrate with Twisted's event loop
@@ -36,9 +38,11 @@ class PyTwist:
                         sys.exit()
                     else:
                         self.runner.input(event)
+			self.guardian.input(event)
 
             # iterate game objects
-            self.runner.tick()
+            self.runner.tick(self.guardian.rect)
+            self.guardian.tick()
             self.move_background()
 
             # display
@@ -47,6 +51,7 @@ class PyTwist:
                 self.screen.blit(self.reverse_bg, self.bg_rect.move(self.width, 0))
             else:
                 self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
+	    self.screen.blit(self.guardian.image, self.guardian.rect)
             self.screen.blit(self.runner.image, self.runner.rect)
             pygame.display.flip()
 

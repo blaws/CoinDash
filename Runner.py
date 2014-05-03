@@ -15,13 +15,15 @@ class Runner(pygame.sprite.Sprite):
             frame.set_colorkey(Color(0, 0, 0))
         self.currentframe = 0
         self.jumpheld = False
+	self.canJump = False
         self.numframes = 3
         self.image = self.frames[0]
 	self.rect = self.image.get_rect()
         self.rect = self.rect.move(35, self.gs.height)
         self.yvel = 0
 
-    def tick(self):
+    def tick(self, guardianRect):
+
         # jump
         self.rect = self.rect.move(0, -self.yvel)
 
@@ -39,13 +41,20 @@ class Runner(pygame.sprite.Sprite):
             self.yvel = 0
             self.rect.bottom = self.gs.height
 
+	#platform
+	if self.rect.colliderect(guardianRect) and -self.yvel > 0:
+	    self.rect.bottom = guardianRect.top
+	    self.canJump = True
+	else:
+	    self.canJump = False
+
         # animate
         self.currentframe = (self.currentframe+1) % self.numframes
         self.image = self.frames[self.currentframe]
 
     def input(self, event):
         if event.key == K_UP:
-            if event.type == KEYDOWN and self.rect.bottom >= self.gs.height:
+            if event.type == KEYDOWN and (self.rect.bottom >= self.gs.height or self.canJump == True):
                 self.yvel = self.jumpvel
                 self.jumpHeld = True
             else:
