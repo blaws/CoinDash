@@ -10,9 +10,9 @@ class Runner(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.gs = gs
         self.jumpvel = 10
-	self.frames = [pygame.image.load('images/Runner1.png').convert(), pygame.image.load('images/Runner2.png').convert(), pygame.image.load('images/Runner3.png').convert()]
-        for frame in self.frames:
-            frame.set_colorkey(Color(0, 0, 0))
+	self.frames = [pygame.image.load('images/Runner1.png'), pygame.image.load('images/Runner2.png'), pygame.image.load('images/Runner3.png')]
+#        for frame in self.frames:
+#            frame.set_colorkey(Color(0, 0, 0))
         self.currentframe = 0
         self.jumpheld = False
 	self.canJump = False
