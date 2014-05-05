@@ -26,9 +26,12 @@ class PyTwist:
         self.bg_speed = 4
 	self.count = 1
 	self.gap = 0
+<<<<<<< HEAD
 	self.score = 0
 	self.font = pygame.font.Font(None, 72)
+=======
         self.addground = 0
+>>>>>>> bfb03bcc8d78b029661168f5ab473dae14db7e33
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -98,7 +101,11 @@ class PyTwist:
                         self.addground = 2
 		else:
 			self.gap += 1
+<<<<<<< HEAD
+	
+=======
                         self.addground = 0
+>>>>>>> bfb03bcc8d78b029661168f5ab473dae14db7e33
 
         # update other player
         if self.connection:
