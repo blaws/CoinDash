@@ -7,7 +7,7 @@ from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 import pygame
 from pygame.locals import *
-from Guardian import *
+from Guardian import Guardian
 from Runner import *
 from Connection import *
 
@@ -15,6 +15,7 @@ class PyTwist:
     def __init__(self):
         pygame.init()
         self.connection = None
+        self.side = None
         self.size = self.width, self.height = 640, 480
         self.screen = pygame.display.set_mode(self.size)
         self.bg = pygame.image.load('images/Background.png').convert()
@@ -29,13 +30,19 @@ class PyTwist:
 	self.guardian = Guardian(self)
 
     def connect(self, side, port, addr=None):
+        self.side = side
         if side == 0:
             reactor.listenTCP(port, ConnectionFactory(self))
         if side == 1:
             reactor.connectTCP(addr, port, ConnectionClientFactory(self))
 
+    def printerror(self, error):
+        print error
+        reactor.stop()
+
     def start(self):
         self.gameloop = LoopingCall(self.main).start(1/60)
+        self.gameloop.addErrback(self.printerror)
         reactor.run()
 
     def main(self):  # pygame loop - called by Twisted's event loop
@@ -47,13 +54,19 @@ class PyTwist:
                 if event.key == K_q or event.key == K_ESCAPE:
                     reactor.stop()
                 else:
-                    self.runner.input(event)
-                    self.guardian.input(event)
+                    if self.side == 0:
+                        self.runner.input(event)
+                    elif self.side == 1:
+                        self.guardian.input(event)
 
         # iterate game objects
         self.runner.tick(self.guardian.rect)
         self.guardian.tick()
         self.move_background()
+
+        # update other player
+        if self.connection:
+            self.connection.sendUpdate()
 
         # display
         self.screen.blit(self.bg, self.bg_rect)
@@ -72,7 +85,7 @@ class PyTwist:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3 and len(sys.argv) != 4:
+    if (len(sys.argv)!=3 and len(sys.argv)!=4) or (sys.argv[1].lower()!='runner' and sys.argv[1].lower()!='guardian'):
         print 'usage: python '+sys.argv[0]+' <runner/guardian> <port> <hostname (guardian only)>'
         sys.exit(1)
 
@@ -82,8 +95,5 @@ if __name__ == '__main__':
         pt.connect(0, int(sys.argv[2]))
     elif sys.argv[1].lower() == 'guardian' and len(sys.argv) > 3:
         pt.connect(1, int(sys.argv[2]), sys.argv[3])
-    else:
-        print 'usage: python '+sys.argv[0]+' <runner/guardian> <port> <hostname (guardian only)>'
-        sys.exit(1)
 
     pt.start()

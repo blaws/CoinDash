@@ -1,4 +1,5 @@
 import pygame
+from threading import Lock
 
 class Ground(pygame.sprite.Sprite):
 	def __init__(self, gs = None, x = 0, y = 0):
@@ -44,12 +45,18 @@ class Guardian(pygame.sprite.Sprite):
 		self.yspeed = 0
 		self.xspeed = 0
 
+		self.lock = Lock()
+
 	def tick(self):
+		self.lock.acquire()
+
 		self.rect = self.rect.move(self.xspeed, self.yspeed)
 		if self.rect.x <= -40:
 			self.xspeed = 0
 			self.image = pygame.image.load("images/InvisiblePlatform.png")
 			self.rect = self.rect.move(600 - self.rect.x, 230 - self.rect.y)
+
+		self.lock.release()
 
 	def input(self, event):
 		if event.type is pygame.KEYDOWN:

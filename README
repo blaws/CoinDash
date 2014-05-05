@@ -3,4 +3,4 @@ PyTwist
 blaws
 amarti36
 
-Asymmetric two-player runner game, written in Python. Uses PyGame and Twisted.
+Asymmetric two-player (networked) runner game, written in Python. Uses PyGame and Twisted.

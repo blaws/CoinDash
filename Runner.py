@@ -4,6 +4,7 @@
 
 import pygame
 from pygame.locals import *
+from threading import Lock
 
 class Runner(pygame.sprite.Sprite):
     def __init__(self, gs):
@@ -11,8 +12,6 @@ class Runner(pygame.sprite.Sprite):
         self.gs = gs
         self.jumpvel = 10
 	self.frames = [pygame.image.load('images/Runner1.png'), pygame.image.load('images/Runner2.png'), pygame.image.load('images/Runner3.png')]
-#        for frame in self.frames:
-#            frame.set_colorkey(Color(0, 0, 0))
         self.currentframe = 0
         self.jumpheld = False
 	self.canJump = False
@@ -21,15 +20,17 @@ class Runner(pygame.sprite.Sprite):
 	self.rect = self.image.get_rect()
         self.rect = self.rect.move(35, self.gs.height)
         self.yvel = 0
+        self.lock = Lock()
 
     def tick(self, guardianRect):
+        self.lock.acquire()
 
         # jump
         self.rect = self.rect.move(0, -self.yvel)
 
 	# gravity
         if self.rect.bottom < self.gs.height:
-            if self.jumpHeld and self.yvel > 0:
+            if self.jumpheld and self.yvel > 0:
                 self.yvel = self.yvel - 0.25
             else:
                 self.yvel = self.yvel - 0.5
@@ -52,10 +53,12 @@ class Runner(pygame.sprite.Sprite):
         self.currentframe = (self.currentframe+1) % self.numframes
         self.image = self.frames[self.currentframe]
 
+        self.lock.release()
+
     def input(self, event):
         if event.key == K_UP:
             if event.type == KEYDOWN and (self.rect.bottom >= self.gs.height or self.canJump == True):
                 self.yvel = self.jumpvel
-                self.jumpHeld = True
+                self.jumpheld = True
             else:
-                self.jumpHeld = False
+                self.jumpheld = False
