@@ -47,6 +47,7 @@ class Connection(Protocol):
             self.gs.runner.currentframe = int(self.data[1])
             self.gs.runner.jumpheld = int(self.data[2])
             self.gs.runner.yvel = int(self.data[3])
+            self.gs.addground = int(self.data[4])
             self.gs.runner.lock.release()
 
     def connectionLost(self, reason):
@@ -54,7 +55,8 @@ class Connection(Protocol):
 
     def sendUpdate(self):
         if self.connType == 0:
-            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel]
+            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.addground]
+            self.addground = 0
         else:
             self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.guardian.addplatform]
             self.gs.newplatform = False

@@ -26,6 +26,7 @@ class PyTwist:
         self.bg_speed = 4
 	self.count = 1
 	self.gap = 0
+        self.addground = 0
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -86,13 +87,16 @@ class PyTwist:
 	self.count += 1
 	if self.count == 24:
 		self.count = 1
-		if (1 != randint(0,9) and self.gap == 0) or self.connection == None:
+		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None or (self.side == 1 and self.addground == 1):
 			self.grounds.append(Ground(self, 640, 360))
-		elif self.gap == 4:
+                        self.addground = 1
+		elif self.gap == 4 or self.addground == 2:
 			self.grounds.append(Ground(self, 640, 360))
 			self.gap = 0
+                        self.addground = 2
 		else:
 			self.gap += 1
+                        self.addground = 0
 
         # update other player
         if self.connection:
