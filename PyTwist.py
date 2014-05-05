@@ -12,6 +12,7 @@ from Guardian import *
 from Runner import *
 from Connection import *
 from Platform import *
+from Wiley import *
 
 class PyTwist:
     def __init__(self):
@@ -36,6 +37,7 @@ class PyTwist:
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
 	self.platforms = list()
+	self.wileys = list()
         self.newplatform = False
 	self.grounds = list()
 	self.grounds.append(Ground(self, 0, 360))
@@ -81,10 +83,15 @@ class PyTwist:
         self.guardian.tick()
 	for platform in self.platforms:
 		platform.tick()
+	for wiley in self.wileys:
+		wiley.tick()
+		if wiley.rect.x <= -100:
+			del self.wileys[self.wileys.index(wiley)]
+			
 	for ground in self.grounds:
 		ground.tick()
 		if ground.rect.x <= -120:
-			del self.grounds[0]
+			del self.grounds[self.grounds.index(ground)]
         self.move_background()
 	self.count += 1
 	if self.count == 24:
@@ -99,6 +106,8 @@ class PyTwist:
 		else:
 			self.gap += 1
                         self.addground = 0
+	if 1 == randint(0, 300) and self.connection != None:
+		self.wileys.append(Wiley(self))
 
         # update other player
         if self.connection:
@@ -116,6 +125,8 @@ class PyTwist:
 		self.screen.blit(platform.image, platform.rect)
 	for ground in self.grounds:
 		self.screen.blit(ground.image, ground.rect)
+	for wiley in self.wileys:
+		self.screen.blit(wiley.image, wiley.rect)
 	text = self.font.render(str(self.score), 1, (10, 10, 10))
 	textpos = text.get_rect()
 	self.screen.blit(text, textpos)
