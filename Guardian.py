@@ -1,4 +1,5 @@
 import pygame
+from Platform import *
 from threading import Lock
 
 class Ground(pygame.sprite.Sprite):
@@ -49,23 +50,17 @@ class Guardian(pygame.sprite.Sprite):
 
 	def tick(self):
 		self.lock.acquire()
-
 		self.rect = self.rect.move(self.xspeed, self.yspeed)
-		if self.rect.x <= -40:
-			self.xspeed = 0
-			self.image = pygame.image.load("images/InvisiblePlatform.png")
-			self.rect = self.rect.move(600 - self.rect.x, 230 - self.rect.y)
-
 		self.lock.release()
 
 	def input(self, event):
 		if event.type is pygame.KEYDOWN:
-			if event.key == pygame.K_w or event.key == pygame.K_s:
+			if event.key == pygame.K_w or event.key == pygame.K_s or event.key == pygame.K_a or event.key == pygame.K_d:
 				self.move(event.key)
 			elif event.key == pygame.K_RETURN:
-				self.makePlatform()
+				self.gs.platforms.append(Platform(self.gs))
 		elif event.type is pygame.KEYUP:
-			if event.key == pygame.K_s or event.key == pygame.K_w:
+			if event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_d:
 				self.stopMove()
 
 	def move(self, key):
@@ -73,13 +68,14 @@ class Guardian(pygame.sprite.Sprite):
 			self.yspeed = 10
 		elif key == pygame.K_w:
 			self.yspeed = -10
+		elif key == pygame.K_a:
+			self.xspeed = -10
+		elif key == pygame.K_d:
+			self.xspeed = 10
 
 	def stopMove(self):
 		self.yspeed = 0
-
-	def makePlatform(self):
-		self.image = pygame.image.load("images/Platform.png")
-		self.xspeed = -5
+		self.xspeed = 0
 
 class GameSpace:
 	def main(self):

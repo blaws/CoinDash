@@ -22,8 +22,8 @@ class Runner(pygame.sprite.Sprite):
         self.yvel = 0
         self.lock = Lock()
 
-    def tick(self, guardianRect):
-        self.lock.acquire()
+    def tick(self):
+	self.lock.acquire()
 
         # jump
         self.rect = self.rect.move(0, -self.yvel)
@@ -43,11 +43,11 @@ class Runner(pygame.sprite.Sprite):
             self.rect.bottom = self.gs.height
 
 	#platform
-	if self.rect.colliderect(guardianRect) and -self.yvel > 0:
-	    self.rect.bottom = guardianRect.top
-	    self.canJump = True
-	else:
-	    self.canJump = False
+	self.canJump = False
+	for platform in self.gs.platforms:
+		if self.rect.colliderect(platform.rect) and abs(self.rect.bottom - platform.rect.top) <= 5:
+		    self.rect.bottom = platform.rect.top
+		    self.canJump = True
 
         # animate
         self.currentframe = (self.currentframe+1) % self.numframes

@@ -7,9 +7,10 @@ from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 import pygame
 from pygame.locals import *
-from Guardian import Guardian
+from Guardian import *
 from Runner import *
 from Connection import *
+from Platform import *
 
 class PyTwist:
     def __init__(self):
@@ -28,6 +29,7 @@ class PyTwist:
         self.clock = pygame.time.Clock()
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
+	self.platforms = list()
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -41,8 +43,7 @@ class PyTwist:
         reactor.stop()
 
     def start(self):
-        self.gameloop = LoopingCall(self.main).start(1/60)
-        self.gameloop.addErrback(self.printerror)
+        self.gameloop = LoopingCall(self.main).start(1/float(60))
         reactor.run()
 
     def main(self):  # pygame loop - called by Twisted's event loop
@@ -60,8 +61,10 @@ class PyTwist:
                         self.guardian.input(event)
 
         # iterate game objects
-        self.runner.tick(self.guardian.rect)
+        self.runner.tick()
         self.guardian.tick()
+	for platform in self.platforms:
+		platform.tick()
         self.move_background()
 
         # update other player
@@ -76,6 +79,8 @@ class PyTwist:
             self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
         self.screen.blit(self.guardian.image, self.guardian.rect)
         self.screen.blit(self.runner.image, self.runner.rect)
+	for platform in self.platforms:
+		self.screen.blit(platform.image, platform.rect)
         pygame.display.flip()
 
     def move_background(self):
