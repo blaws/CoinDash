@@ -30,17 +30,19 @@ class Runner(pygame.sprite.Sprite):
         self.rect = self.rect.move(0, -self.yvel)
 
 	# gravity
-        if self.rect.bottom < self.gs.height:
+        if self.rect.top < self.gs.height:
             if self.jumpheld and self.yvel > 0:
                 self.yvel = self.yvel - 0.25
             else:
                 self.yvel = self.yvel - 0.5
         else:
-            self.yvel = 0
+		self.gs.gameover()
 
 	#ground
 	for ground in self.gs.grounds:
 		if self.rect.colliderect(ground.rect):
+		    if self.rect.bottom - ground.rect.top >= 8 and abs(self.rect.right - ground.rect.left) <= 8:
+			self.gs.gameover()
 		    self.yvel = 0
 		    self.canJump = True
 

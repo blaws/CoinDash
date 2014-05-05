@@ -6,6 +6,7 @@ import sys
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 import pygame
+from random import randint
 from pygame.locals import *
 from Guardian import *
 from Runner import *
@@ -23,6 +24,8 @@ class PyTwist:
         self.reverse_bg = pygame.transform.flip(self.bg, True, False)
         self.bg_rect = self.bg.get_rect()
         self.bg_speed = 4
+	self.count = 1
+	self.gap = 0
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -79,8 +82,17 @@ class PyTwist:
 		ground.tick()
 		if ground.rect.x <= -120:
 			del self.grounds[0]
-			self.grounds.append(Ground(self, self.grounds[-1].rect.x +120, 360))
         self.move_background()
+	self.count += 1
+	if self.count == 24:
+		self.count = 1
+		if 1 != randint(0,9) and self.gap == 0:
+			self.grounds.append(Ground(self, 640, 360))
+		elif self.gap == 4:
+			self.grounds.append(Ground(self, 640, 360))
+			self.gap = 0
+		else:
+			self.gap += 1
 
         # update other player
         if self.connection:
@@ -104,6 +116,9 @@ class PyTwist:
         self.bg_rect = self.bg_rect.move(-self.bg_speed, 0)
         if self.bg_rect.right <= 0:
             self.bg_rect.left = self.width
+
+    def gameover(self):
+	reactor.stop()
 
 
 if __name__ == '__main__':

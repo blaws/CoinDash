@@ -6,10 +6,13 @@ class Ground(pygame.sprite.Sprite):
 	def __init__(self, gs = None, x = 0, y = 0):
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
-		self.image = pygame.image.load("images/Ground.png")
+		if self.gs.gap == 4:
+			self.image = pygame.image.load("images/Ground2.png")
+		else:
+			self.image = pygame.image.load("images/Ground.png")
 		self.rect = self.image.get_rect()
 		self.rect = self.rect.move(x, y)
-		self.xspeed = -10
+		self.xspeed = -5
 		self.yspeed = 0
 
 	def tick(self):
