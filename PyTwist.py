@@ -86,7 +86,7 @@ class PyTwist:
 	self.count += 1
 	if self.count == 24:
 		self.count = 1
-		if 1 != randint(0,9) and self.gap == 0:
+		if (1 != randint(0,9) and self.gap == 0) or self.connection == None:
 			self.grounds.append(Ground(self, 640, 360))
 		elif self.gap == 4:
 			self.grounds.append(Ground(self, 640, 360))
