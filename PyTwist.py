@@ -26,6 +26,8 @@ class PyTwist:
         self.bg_speed = 4
 	self.count = 1
 	self.gap = 0
+	self.score = 0
+	self.font = pygame.font.Font(None, 72)
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -93,6 +95,7 @@ class PyTwist:
 			self.gap = 0
 		else:
 			self.gap += 1
+	
 
         # update other player
         if self.connection:
@@ -110,6 +113,9 @@ class PyTwist:
 		self.screen.blit(platform.image, platform.rect)
 	for ground in self.grounds:
 		self.screen.blit(ground.image, ground.rect)
+	text = self.font.render(str(self.score), 1, (10, 10, 10))
+	textpos = text.get_rect()
+	self.screen.blit(text, textpos)
         pygame.display.flip()
 
     def move_background(self):
