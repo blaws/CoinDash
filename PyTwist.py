@@ -35,7 +35,7 @@ class PyTwist:
             reactor.connectTCP(addr, port, ConnectionClientFactory(self))
 
     def start(self):
-        self.gameloop = LoopingCall(self.main).start(1/60)
+        self.gameloop = LoopingCall(self.main).start(1/float(60))
         reactor.run()
 
     def main(self):  # pygame loop - called by Twisted's event loop
