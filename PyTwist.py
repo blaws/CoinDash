@@ -30,6 +30,14 @@ class PyTwist:
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
 	self.platforms = list()
+	self.grounds = list()
+	self.grounds.append(Ground(self, 0, 360))
+	self.grounds.append(Ground(self, 120, 360))
+	self.grounds.append(Ground(self, 240, 360))
+	self.grounds.append(Ground(self, 360, 360))
+	self.grounds.append(Ground(self, 480, 360))
+	self.grounds.append(Ground(self, 600, 360))
+	self.grounds.append(Ground(self, 720, 360))
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -65,6 +73,11 @@ class PyTwist:
         self.guardian.tick()
 	for platform in self.platforms:
 		platform.tick()
+	for ground in self.grounds:
+		ground.tick()
+		if ground.rect.x <= -120:
+			del self.grounds[0]
+			self.grounds.append(Ground(self, self.grounds[-1].rect.x +120, 360))
         self.move_background()
 
         # update other player
@@ -81,6 +94,8 @@ class PyTwist:
         self.screen.blit(self.runner.image, self.runner.rect)
 	for platform in self.platforms:
 		self.screen.blit(platform.image, platform.rect)
+	for ground in self.grounds:
+		self.screen.blit(ground.image, ground.rect)
         pygame.display.flip()
 
     def move_background(self):

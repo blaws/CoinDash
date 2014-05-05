@@ -10,7 +10,7 @@ class Runner(pygame.sprite.Sprite):
     def __init__(self, gs):
         pygame.sprite.Sprite.__init__(self)
         self.gs = gs
-        self.jumpvel = 10
+        self.jumpvel = 8
 	self.frames = [pygame.image.load('images/Runner1.png'), pygame.image.load('images/Runner2.png'), pygame.image.load('images/Runner3.png')]
         self.currentframe = 0
         self.jumpheld = False
@@ -18,12 +18,13 @@ class Runner(pygame.sprite.Sprite):
         self.numframes = 3
         self.image = self.frames[0]
 	self.rect = self.image.get_rect()
-        self.rect = self.rect.move(35, self.gs.height)
+        self.rect = self.rect.move(35, 200)
         self.yvel = 0
         self.lock = Lock()
 
     def tick(self):
 	self.lock.acquire()
+	self.canJump = False
 
         # jump
         self.rect = self.rect.move(0, -self.yvel)
@@ -37,17 +38,19 @@ class Runner(pygame.sprite.Sprite):
         else:
             self.yvel = 0
 
-	# floor
-        if self.rect.bottom > self.gs.height:
-            self.yvel = 0
-            self.rect.bottom = self.gs.height
+	#ground
+	for ground in self.gs.grounds:
+		if self.rect.colliderect(ground.rect):
+		    self.yvel = 0
+		    self.canJump = True
 
 	#platform
-	self.canJump = False
 	for platform in self.gs.platforms:
-		if self.rect.colliderect(platform.rect) and abs(self.rect.bottom - platform.rect.top) <= 5:
-		    self.rect.bottom = platform.rect.top
+		if self.rect.colliderect(platform.rect) and abs(self.rect.bottom - platform.rect.top) <= 8:
+		    self.yvel = 0
 		    self.canJump = True
+		if platform.rect.x <= -40:
+			del self.gs.platforms[self.gs.platforms.index(platform)]
 
         # animate
         self.currentframe = (self.currentframe+1) % self.numframes
