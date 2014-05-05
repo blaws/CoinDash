@@ -39,8 +39,7 @@ class Connection(Protocol):
             self.gs.guardian.rect = Rect(self.data[0])
             self.gs.guardian.xspeed = int(self.data[1])
             self.gs.guardian.yspeed = int(self.data[2])
-            if bool(self.data[3]):
-                self.gs.platforms.append(Platform(self.gs))
+            self.gs.guardian.addplatform = bool(self.data[3])
             self.gs.guardian.lock.release()
         else:
             self.gs.runner.lock.acquire()
@@ -57,6 +56,6 @@ class Connection(Protocol):
         if self.connType == 0:
             self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel]
         else:
-            self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.newplatform]
+            self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.guardian.addplatform]
             self.gs.newplatform = False
         self.transport.write(dumps(self.data))

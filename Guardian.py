@@ -45,11 +45,20 @@ class Guardian(pygame.sprite.Sprite):
 		self.rect = self.rect.move(600, 230)
 		self.yspeed = 0
 		self.xspeed = 0
+		self.addplatform = False
+		self.counter = 0
 
 		self.lock = Lock()
 
 	def tick(self):
 		self.lock.acquire()
+		if self.addplatform:
+			if self.counter <= 0:
+				self.gs.platforms.append(Platform(self.gs))
+				self.counter = self.rect.width/6
+			else:
+				self.counter -= 1
+		self.gs.newplatform = True
 		self.rect = self.rect.move(self.xspeed, self.yspeed)
 		self.lock.release()
 
@@ -58,11 +67,13 @@ class Guardian(pygame.sprite.Sprite):
 			if event.key == pygame.K_w or event.key == pygame.K_s or event.key == pygame.K_a or event.key == pygame.K_d:
 				self.move(event.key)
 			elif event.key == pygame.K_RETURN:
-				self.gs.platforms.append(Platform(self.gs))
-				self.gs.newplatform = True
+				self.addplatform = True
+				self.counter = 0
 		elif event.type is pygame.KEYUP:
 			if event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_d:
 				self.stopMove()
+			elif event.key == pygame.K_RETURN:
+				self.addplatform = False
 
 	def move(self, key):
 		if key == pygame.K_s:
