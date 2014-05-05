@@ -30,6 +30,7 @@ class PyTwist:
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
 	self.platforms = list()
+        self.newplatform = False
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -44,6 +45,7 @@ class PyTwist:
 
     def start(self):
         self.gameloop = LoopingCall(self.main).start(1/float(60))
+        self.gameloop.addErrback(self.printerror)
         reactor.run()
 
     def main(self):  # pygame loop - called by Twisted's event loop
