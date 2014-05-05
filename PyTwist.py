@@ -118,6 +118,7 @@ class PyTwist:
             self.bg_rect.left = self.width
 
     def gameover(self):
+	print "game over"
 	reactor.stop()
 
 
