@@ -59,6 +59,7 @@ class Guardian(pygame.sprite.Sprite):
 				self.move(event.key)
 			elif event.key == pygame.K_RETURN:
 				self.gs.platforms.append(Platform(self.gs))
+				self.gs.newplatform = True
 		elif event.type is pygame.KEYUP:
 			if event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_d:
 				self.stopMove()

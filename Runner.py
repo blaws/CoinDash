@@ -53,8 +53,8 @@ class Runner(pygame.sprite.Sprite):
 			del self.gs.platforms[self.gs.platforms.index(platform)]
 
         # animate
-        self.currentframe = (self.currentframe+1) % self.numframes
-        self.image = self.frames[self.currentframe]
+        self.currentframe = (self.currentframe+0.5) % self.numframes
+        self.image = self.frames[int(self.currentframe)]
 
         self.lock.release()
 

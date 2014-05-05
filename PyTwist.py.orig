@@ -30,7 +30,7 @@ class PyTwist:
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
 	self.platforms = list()
-        self.newplatform = False
+<<<<<<< HEAD
 	self.grounds = list()
 	self.grounds.append(Ground(self, 0, 360))
 	self.grounds.append(Ground(self, 120, 360))
@@ -39,6 +39,9 @@ class PyTwist:
 	self.grounds.append(Ground(self, 480, 360))
 	self.grounds.append(Ground(self, 600, 360))
 	self.grounds.append(Ground(self, 720, 360))
+=======
+        self.newplatform = False
+>>>>>>> a754ccc5ba9447694a48efbaafd713d66801c3bd
 
     def connect(self, side, port, addr=None):
         self.side = side
