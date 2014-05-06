@@ -98,7 +98,11 @@ class PyTwist:
 		wiley.tick()
 		if wiley.rect.x <= -100:
 			del self.wileys[self.wileys.index(wiley)]
-			
+        if self.side == 1:
+            self.grounds = []
+            for rect in self.groundrects:
+                print rect.x, rect.y
+                self.grounds.append(Ground(self, rect.x, rect.y))
 	for ground in self.grounds:
 		ground.tick()
 		if ground.rect.right < 0:
