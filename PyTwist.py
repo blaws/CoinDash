@@ -46,13 +46,10 @@ class PyTwist:
 	self.wileys = list()
         self.newplatform = False
 	self.grounds = list()
-	self.grounds.append(Ground(self, 0, 360))
-	self.grounds.append(Ground(self, 120, 360))
-	self.grounds.append(Ground(self, 240, 360))
-	self.grounds.append(Ground(self, 360, 360))
-	self.grounds.append(Ground(self, 480, 360))
-	self.grounds.append(Ground(self, 600, 360))
-	self.grounds.append(Ground(self, 720, 360))
+        self.groundrects = list()
+        for i in range(0,721,120):
+            self.grounds.append(Ground(self, i, 360))
+            self.groundrects.append(Rect(i, 360, 120, 120))
         self.coins = list()
 
 	# create game sounds
@@ -105,6 +102,7 @@ class PyTwist:
 	for ground in self.grounds:
 		ground.tick()
 		if ground.rect.right < 0:
+                        del self.groundrects[self.grounds.index(ground)]
 			del self.grounds[self.grounds.index(ground)]
         if self.connection and self.side == 0 and randint(0,100) == 0:
             self.addcoin = randint(0, self.height-150)
@@ -120,11 +118,11 @@ class PyTwist:
 		self.count = 1
 		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None or (self.side == 1 and self.addground == 1):
 			self.grounds.append(Ground(self, 640, 360))
-                        self.addground = 1
+                        self.groundrects.append(self.grounds[-1].rect)
 		elif (self.side == 0 and self.gap == 4) or (self.side == 1 and self.addground == 2):
 			self.grounds.append(Ground(self, 640, 360))
+                        self.groundrects.append(self.grounds[-1].rect)
 			self.gap = 0
-                        self.addground = 2
 		else:
 			self.gap += 1
                         self.addground = 0

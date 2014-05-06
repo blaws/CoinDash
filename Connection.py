@@ -47,7 +47,7 @@ class Connection(Protocol):
             self.gs.runner.currentframe = int(self.data[1])
             self.gs.runner.jumpheld = int(self.data[2])
             self.gs.runner.yvel = int(self.data[3])
-            self.gs.addground = int(self.data[4])
+            self.gs.groundrects = list(self.data[4])
             self.gs.addcoin = int(self.data[5])
             self.gs.addwiley = int(self.data[6])
             self.gs.runner.lock.release()
@@ -57,7 +57,7 @@ class Connection(Protocol):
 
     def sendUpdate(self):
         if self.connType == 0:
-            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.addground, self.gs.addcoin, self.gs.addwiley]
+            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.groundrects, self.gs.addcoin, self.gs.addwiley]
             self.gs.addground = 0
             self.gs.addcoin = -1
             self.gs.addwiley = -1
