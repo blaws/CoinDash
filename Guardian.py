@@ -20,7 +20,7 @@ class Ground(pygame.sprite.Sprite):
 		self.yspeed = 0
 
 	def tick(self):
-			self.rect = self.rect.move(self.xspeed, self.yspeed)
+			self.rect.move_ip(self.xspeed, self.yspeed)
 
 class Guardian(pygame.sprite.Sprite):
 	def __init__(self, gs = None):

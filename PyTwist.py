@@ -102,6 +102,7 @@ class PyTwist:
             self.grounds = []
             for rect in self.groundrects:
                 print rect.x, rect.y
+                rect.x -= 5
                 self.grounds.append(Ground(self, rect.x, rect.y))
 	for ground in self.grounds:
 		ground.tick()

@@ -57,6 +57,7 @@ class Connection(Protocol):
 
     def sendUpdate(self):
         if self.connType == 0:
+            print self.gs.groundrects
             self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.groundrects, self.gs.addcoin, self.gs.addwiley]
             self.gs.addground = 0
             self.gs.addcoin = -1
