@@ -26,7 +26,8 @@ class CoinDash:
         self.side = None
         self.size = self.width, self.height = 640, 480
         self.screen = pygame.display.set_mode(self.size)
-        pygame.display.set_caption('PyTwist')
+        pygame.display.set_caption('CoinDash')
+        pygame.display.set_icon(pygame.image.load('images/Runner1.png'))
         self.bg = pygame.image.load('images/Background.png').convert()
         self.reverse_bg = pygame.transform.flip(self.bg, True, False)
         self.bg_rect = self.bg.get_rect()
