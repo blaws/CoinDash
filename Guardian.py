@@ -10,7 +10,7 @@ class Ground(pygame.sprite.Sprite):
 	def __init__(self, gs = None, x = 0, y = 0):
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
-		if abs(self.gs.grounds[self.gs.grounds.index(self) - 1].rect.x - x) < 120:
+		if len(self.gs.grounds) != 0 and abs(self.gs.grounds[-1].rect.x - x) > 120:
 			self.image = pygame.image.load("images/Ground2.png")
 		else:
 			self.image = pygame.image.load("images/Ground.png")
