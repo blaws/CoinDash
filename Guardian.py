@@ -10,8 +10,10 @@ class Ground(pygame.sprite.Sprite):
 	def __init__(self, gs = None, x = 0, y = 0):
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
+		self.imageType = 0
 		if self.gs.gap == 4:
 			self.image = pygame.image.load("images/Ground2.png")
+			self.imageType = 1
 		else:
 			self.image = pygame.image.load("images/Ground.png")
 		self.rect = self.image.get_rect()
