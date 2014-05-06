@@ -11,7 +11,6 @@ class Explosion(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.x = self.gs.runner.rect.x + 15
 		self.y = self.gs.runner.rect.y
-		print self.y
 		if self.y >= 400:
 			self.y = 400
 		self.rect = self.rect.move(self.x, self.y)
