@@ -46,10 +46,12 @@ class PyTwist:
 	self.wileys = list()
         self.newplatform = False
 	self.grounds = list()
+        self.groundimage = pygame.image.load('images/Ground.png').convert()
+        self.spikegroundimage = pygame.image.load('images/Ground2.png').convert()
         self.groundrects = list()
         for i in range(0,721,120):
             self.grounds.append(Ground(self, i, 360))
-            self.groundrects.append(Rect(i, 360, 120, 120))
+#            self.groundrects.append(Rect(i, 360, 120, 120))
         self.coins = list()
 
 	# create game sounds
@@ -99,16 +101,18 @@ class PyTwist:
 		if wiley.rect.x <= -100:
 			del self.wileys[self.wileys.index(wiley)]
         if self.side == 1:
-            self.grounds = []
-            for rect in self.groundrects:
-                print rect.x, rect.y
-                rect.x -= 5
-                self.grounds.append(Ground(self, rect.x, rect.y))
+            if self.connection and len(self.groundrects)>0:
+                self.grounds = []
+                for rect in self.groundrects:
+                    print rect.x, rect.y
+                    rect.x -= 5
+                    self.grounds.append(Ground(self, rect.x, rect.y))
 	for ground in self.grounds:
 		ground.tick()
-		if ground.rect.right < 0:
+		if ground.rect.right < -120:
+                    if len(self.groundrects) > 0:
                         del self.groundrects[self.grounds.index(ground)]
-			del self.grounds[self.grounds.index(ground)]
+                    del self.grounds[self.grounds.index(ground)]
         if self.connection and self.side == 0 and randint(0,100) == 0:
             self.addcoin = randint(0, self.height-150)
             self.coins.append(Coin(self, self.addcoin))
@@ -121,7 +125,7 @@ class PyTwist:
 	self.count += 1
 	if self.count == 24:
 		self.count = 1
-		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None or (self.side == 1 and self.addground == 1):
+		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None:
 			self.grounds.append(Ground(self, 640, 360))
                         self.groundrects.append(self.grounds[-1].rect)
 		elif (self.side == 0 and self.gap == 4) or (self.side == 1 and self.addground == 2):
@@ -153,7 +157,10 @@ class PyTwist:
 	for platform in self.platforms:
 		self.screen.blit(platform.image, platform.rect)
 	for ground in self.grounds:
-		self.screen.blit(ground.image, ground.rect)
+            if self.grounds.index(ground) == 0 or abs(self.grounds[self.grounds.index(ground)-1].rect.x - ground.rect.x) > 120:
+		self.screen.blit(self.spikegroundimage, ground.rect)  #ground.image, 
+            else:
+		self.screen.blit(self.groundimage, ground.rect)  #ground.image, ground.rect)
         for coin in self.coins:
             if coin.rect.right > self.width:
                 tmp_rect = Rect(coin.rect)
@@ -204,7 +211,10 @@ class PyTwist:
 		for platform in self.platforms:
 			self.screen.blit(platform.image, platform.rect)
 		for ground in self.grounds:
-			self.screen.blit(ground.image, ground.rect)
+                    if len(self.grounds) and self.grounds.index(ground) > 0 and abs(self.grounds[self.grounds.index(ground)-1].rect.x - ground.rect.x) > 120:
+                        self.screen.blit(self.spikegroundimage, ground.rect)  #ground.image, 
+                    else:
+                        self.screen.blit(self.groundimage, ground.rect)  #ground.image, ground.rect)
 		for wiley in self.wileys:
 			self.screen.blit(wiley.image, wiley.rect)
 		self.screen.blit(text, textpos)
