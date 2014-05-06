@@ -19,7 +19,7 @@ from Coin import *
 from Wiley import *
 from Explosion import *
 
-class PyTwist:
+class CoinDash:
     def __init__(self):
         pygame.init()
         self.connection = None
@@ -38,6 +38,7 @@ class PyTwist:
 	self.connectionFont = pygame.font.Font(None, 72)
         self.addcoin = -1
         self.addwiley = -1
+        self.difficulty = 0
 
         # create game objects
         self.runner = Runner(self)
@@ -112,17 +113,20 @@ class PyTwist:
 	self.count += 1
 	if self.count == 24:
 		self.count = 1
-		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None or self.gap == 4:
+		if (self.side == 0 and 0 != randint(0,9-self.difficulty) and self.gap == 0) or self.connection == None or self.gap == 4:
 			self.grounds.append(Ground(640, 360))
 #                        self.groundrects.append(self.grounds[-1].rect)
 		elif self.side == 0:
 			self.gap += 1
-	if 1 == randint(0, 600) and self.connection != None and self.side == 0:
+	if 1 == randint(0, 600-self.difficulty*60) and self.connection != None and self.side == 0:
             self.addwiley = randint(0, self.height-150)
             self.wileys.append(Wiley(self, self.addwiley))
         elif self.connection and self.side == 1 and self.addwiley > -1:
             self.wileys.append(Wiley(self, self.addwiley))
             self.addwiley = -1
+        self.difficulty = self.score / 10
+        if self.difficulty > 9:
+            self.difficulty = 9
 
 
         # update other player
@@ -227,11 +231,11 @@ if __name__ == '__main__':
         print 'usage: python '+sys.argv[0]+' <runner/guardian> <port> <hostname (guardian only)>'
         sys.exit(1)
 
-    pt = PyTwist()
+    cd = CoinDash()
 
     if sys.argv[1].lower() == 'runner':
-        pt.connect(0, int(sys.argv[2]))
+        cd.connect(0, int(sys.argv[2]))
     elif sys.argv[1].lower() == 'guardian' and len(sys.argv) > 3:
-        pt.connect(1, int(sys.argv[2]), sys.argv[3])
+        cd.connect(1, int(sys.argv[2]), sys.argv[3])
 
-    pt.start()
+    cd.start()

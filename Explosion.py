@@ -17,7 +17,7 @@ class Explosion(pygame.sprite.Sprite):
 		self.rect = self.rect.move(self.x, self.y)
 
 	def tick(self):
-		if self.count == 15:
+		if self.count == 30:
 			self.animation += 1
 			self.image = pygame.image.load("images/Explosion" + str(self.animation) + ".png")
 			self.count = 0

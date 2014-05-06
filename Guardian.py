@@ -45,25 +45,25 @@ class Guardian(pygame.sprite.Sprite):
 
 	def input(self, event):
 		if event.type is pygame.KEYDOWN:
-			if event.key == pygame.K_w or event.key == pygame.K_s or event.key == pygame.K_a or event.key == pygame.K_d:
+			if event.key == pygame.K_UP or event.key == pygame.K_DOWN or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
 				self.move(event.key)
 			elif event.key == pygame.K_RETURN:
 				self.addplatform = True
 				self.counter = 0
 		elif event.type is pygame.KEYUP:
-			if event.key == pygame.K_s or event.key == pygame.K_w or event.key == pygame.K_a or event.key == pygame.K_d:
+			if event.key == pygame.K_DOWN or event.key == pygame.K_UP or event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
 				self.stopMove()
 			elif event.key == pygame.K_RETURN:
 				self.addplatform = False
 
 	def move(self, key):
-		if key == pygame.K_s:
+		if key == pygame.K_DOWN:
 			self.yspeed = 10
-		elif key == pygame.K_w:
+		elif key == pygame.K_UP:
 			self.yspeed = -10
-		elif key == pygame.K_a:
+		elif key == pygame.K_LEFT:
 			self.xspeed = -10
-		elif key == pygame.K_d:
+		elif key == pygame.K_RIGHT:
 			self.xspeed = 10
 
 	def stopMove(self):
