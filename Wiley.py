@@ -2,14 +2,14 @@ import pygame
 from random import randint
 
 class Wiley(pygame.sprite.Sprite):
-	def __init__(self, gs = None):
+	def __init__(self, gs, y):
 		pygame.sprite.Sprite.__init__(self)
 
 		self.gs = gs
 		self.count = 0
 		self.image = pygame.image.load("images/Wiley1.png")
 		self.rect = self.image.get_rect()
-		self.rect = self.rect.move(640, randint(0, 300))
+		self.rect = self.rect.move(640, y)
 		self.yspeed = 0
 		self.xspeed = -5
 

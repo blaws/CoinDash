@@ -34,6 +34,7 @@ class PyTwist:
 	self.font = pygame.font.Font(None, 72)
         self.addground = 0
         self.addcoin = -1
+        self.addwiley = -1
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -76,7 +77,7 @@ class PyTwist:
         self.gameloop.addErrback(self.printerror)
         reactor.run()
 
-    def main(self):  # pygame loop - called by Twisted's event loop
+    def main(self):  # pygame loop - called by Twisted's event loop every 1/60 of a second
         # handle input
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -104,10 +105,10 @@ class PyTwist:
 		ground.tick()
 		if ground.rect.right < 0:
 			del self.grounds[self.grounds.index(ground)]
-        if self.connection and self.side == 0 and randint(0,10) == 0:
+        if self.connection and self.side == 0 and randint(0,100) == 0:
             self.addcoin = randint(0, self.height-150)
             self.coins.append(Coin(self, self.addcoin))
-        if self.connection and self.side == 1 and self.addcoin > -1:
+        elif self.connection and self.side == 1 and self.addcoin > -1:
             self.coins.append(Coin(self, self.addcoin))
             self.addcoin = -1
         for coin in self.coins:
@@ -119,15 +120,20 @@ class PyTwist:
 		if (self.side == 0 and 1 != randint(0,9) and self.gap == 0) or self.connection == None or (self.side == 1 and self.addground == 1):
 			self.grounds.append(Ground(self, 640, 360))
                         self.addground = 1
-		elif self.gap == 4 or self.addground == 2:
+		elif (self.side == 0 and self.gap == 4) or (self.side == 1 and self.addground == 2):
 			self.grounds.append(Ground(self, 640, 360))
 			self.gap = 0
                         self.addground = 2
 		else:
 			self.gap += 1
                         self.addground = 0
-	if 1 == randint(0, 300) and self.connection != None:
-		self.wileys.append(Wiley(self))
+	if 1 == randint(0, 20) and self.connection != None and self.side == 0:
+            self.addwiley = randint(0, self.height-150)
+            self.wileys.append(Wiley(self, self.addwiley))
+        elif self.connection and self.side == 1 and self.addwiley > -1:
+            self.wileys.append(Wiley(self, self.addwiley))
+            self.addwiley = -1
+
 
         # update other player
         if self.connection:

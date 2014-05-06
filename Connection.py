@@ -49,6 +49,7 @@ class Connection(Protocol):
             self.gs.runner.yvel = int(self.data[3])
             self.gs.addground = int(self.data[4])
             self.gs.addcoin = int(self.data[5])
+            self.gs.addwiley = int(self.data[6])
             self.gs.runner.lock.release()
 
     def connectionLost(self, reason):
@@ -56,9 +57,10 @@ class Connection(Protocol):
 
     def sendUpdate(self):
         if self.connType == 0:
-            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.addground, self.gs.addcoin]
+            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.addground, self.gs.addcoin, self.gs.addwiley]
             self.gs.addground = 0
             self.gs.addcoin = -1
+            self.gs.addwiley = -1
         else:
             self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.guardian.addplatform]
             self.gs.newplatform = False
