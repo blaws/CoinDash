@@ -41,7 +41,7 @@ class Runner(pygame.sprite.Sprite):
 	#ground
 	for ground in self.gs.grounds:
 		if self.rect.colliderect(ground.rect):
-		    if self.rect.bottom - ground.rect.top >= 8 and abs(self.rect.right - ground.rect.left) <= 8:
+		    if self.rect.bottom - ground.rect.top >= 15 and abs(self.rect.right - ground.rect.left) <= 8:
 			self.gs.gameover()
 		    self.yvel = 0
 		    self.canJump = True
@@ -53,6 +53,17 @@ class Runner(pygame.sprite.Sprite):
 		    self.canJump = True
 		if platform.rect.x <= -40:
 			del self.gs.platforms[self.gs.platforms.index(platform)]
+
+	#wiley
+	for wiley in self.gs.wileys:
+		if self.rect.colliderect(wiley.rect):
+			self.gs.gameover()
+
+	#coin
+	for coin in self.gs.coins:
+		if self.rect.colliderect(coin.rect):
+			self.gs.score += 1
+			del self.gs.coins[self.gs.coins.index(coin)]
 
         # animate
         self.currentframe = (self.currentframe+0.5) % self.numframes

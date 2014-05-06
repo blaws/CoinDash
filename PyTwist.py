@@ -158,6 +158,17 @@ class PyTwist:
 
     def gameover(self):
 	self.explosion = Explosion(self)
+	scoreFont = pygame.font.Font(None, 72)
+	scoreText = scoreFont.render("SCORE:", 1, (10, 10, 10))
+	scoreTextpos = scoreText.get_rect()
+	text = self.font.render(str(self.score), 1, (10, 10, 10))
+	textpos = text.get_rect()
+	textpos.x = 320
+	textpos.y = 80
+	scoreTextpos.x = 250
+	self.youDied = pygame.image.load("images/youDied.png")
+	self.youDied_rect = self.youDied.get_rect()
+
 	while self.explosion.animation != 15:
 		self.explosion.tick()
 		self.screen.blit(self.bg, self.bg_rect)
@@ -172,10 +183,10 @@ class PyTwist:
 			self.screen.blit(ground.image, ground.rect)
 		for wiley in self.wileys:
 			self.screen.blit(wiley.image, wiley.rect)
-		text = self.font.render(str(self.score), 1, (10, 10, 10))
-		textpos = text.get_rect()
 		self.screen.blit(text, textpos)
+		self.screen.blit(scoreText, scoreTextpos)
 		self.screen.blit(self.explosion.image, self.explosion.rect)
+		self.screen.blit(self.youDied, self.youDied_rect)
 		pygame.display.flip()
 	reactor.stop()
 
