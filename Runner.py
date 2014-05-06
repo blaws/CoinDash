@@ -62,6 +62,7 @@ class Runner(pygame.sprite.Sprite):
 	#coin
 	for coin in self.gs.coins:
 		if self.rect.colliderect(coin.rect):
+			self.gs.coinSound.play()
 			self.gs.score += 1
 			del self.gs.coins[self.gs.coins.index(coin)]
 
@@ -74,6 +75,7 @@ class Runner(pygame.sprite.Sprite):
     def input(self, event):
         if event.key == K_UP:
             if event.type == KEYDOWN and (self.rect.bottom >= self.gs.height or self.canJump == True):
+		self.gs.jumpSound.play()
                 self.yvel = self.jumpvel
                 self.jumpheld = True
             else:

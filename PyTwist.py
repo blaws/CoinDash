@@ -19,6 +19,7 @@ from Explosion import *
 class PyTwist:
     def __init__(self):
         pygame.init()
+	pygame.mixer.init()
         self.connection = None
         self.side = None
         self.size = self.width, self.height = 640, 480
@@ -51,6 +52,13 @@ class PyTwist:
 	self.grounds.append(Ground(self, 600, 360))
 	self.grounds.append(Ground(self, 720, 360))
         self.coins = list()
+
+	# create game sounds
+	self.explosionSound = pygame.mixer.Sound("sounds/Explosion.wav")
+	self.jumpSound = pygame.mixer.Sound("sounds/Jump.aiff")
+	self.coinSound = pygame.mixer.Sound("sounds/Coin.wav")
+	pygame.mixer.music.load("sounds/LazyInSpain.wav")
+	pygame.mixer.music.play()
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -168,6 +176,7 @@ class PyTwist:
 	scoreTextpos.x = 250
 	self.youDied = pygame.image.load("images/youDied.png")
 	self.youDied_rect = self.youDied.get_rect()
+	self.explosionSound.play()
 
 	while self.explosion.animation != 15:
 		self.explosion.tick()
