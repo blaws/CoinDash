@@ -94,10 +94,10 @@ class PyTwist:
 			
 	for ground in self.grounds:
 		ground.tick()
-		if ground.rect.x <= -120:
-			del self.grounds[0]
-        if self.connection and self.side == 0 and randint(0,500) == 0:
-            self.addcoin = randint(0, self.height)
+		if ground.rect.right < 0:
+			del self.grounds[self.grounds.index(ground)]
+        if self.connection and self.side == 0 and randint(0,10) == 0:
+            self.addcoin = randint(0, self.height-150)
             self.coins.append(Coin(self, self.addcoin))
         if self.connection and self.side == 1 and self.addcoin > -1:
             self.coins.append(Coin(self, self.addcoin))

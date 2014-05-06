@@ -57,8 +57,8 @@ class Connection(Protocol):
     def sendUpdate(self):
         if self.connType == 0:
             self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.addground, self.gs.addcoin]
-            self.addground = 0
-            self.addcoin = -1
+            self.gs.addground = 0
+            self.gs.addcoin = -1
         else:
             self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.guardian.addplatform]
             self.gs.newplatform = False
