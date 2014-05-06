@@ -60,7 +60,7 @@ class PyTwist:
 	self.jumpSound = pygame.mixer.Sound("sounds/Jump.aiff")
 	self.coinSound = pygame.mixer.Sound("sounds/Coin.wav")
 	pygame.mixer.music.load("sounds/LazyInSpain.wav")
-	pygame.mixer.music.play()
+	pygame.mixer.music.play(-1)
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -128,7 +128,7 @@ class PyTwist:
 		else:
 			self.gap += 1
                         self.addground = 0
-	if 1 == randint(0, 20) and self.connection != None and self.side == 0:
+	if 1 == randint(0, 600) and self.connection != None and self.side == 0:
             self.addwiley = randint(0, self.height-150)
             self.wileys.append(Wiley(self, self.addwiley))
         elif self.connection and self.side == 1 and self.addwiley > -1:
