@@ -12,6 +12,7 @@ from Guardian import *
 from Runner import *
 from Connection import *
 from Platform import *
+from Coin import *
 
 class PyTwist:
     def __init__(self):
@@ -27,6 +28,7 @@ class PyTwist:
 	self.count = 1
 	self.gap = 0
         self.addground = 0
+        self.addcoin = -1
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -43,6 +45,7 @@ class PyTwist:
 	self.grounds.append(Ground(self, 480, 360))
 	self.grounds.append(Ground(self, 600, 360))
 	self.grounds.append(Ground(self, 720, 360))
+        self.coins = list()
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -83,6 +86,14 @@ class PyTwist:
 		ground.tick()
 		if ground.rect.x <= -120:
 			del self.grounds[0]
+        if self.connection and self.side == 0 and randint(0,500) == 0:
+            self.addcoin = randint(0, self.height)
+            self.coins.append(Coin(self, self.addcoin))
+        if self.connection and self.side == 1 and self.addcoin > -1:
+            self.coins.append(Coin(self, self.addcoin))
+            self.addcoin = -1
+        for coin in self.coins:
+            coin.tick()
         self.move_background()
 	self.count += 1
 	if self.count == 24:
@@ -109,11 +120,18 @@ class PyTwist:
         else:
             self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
         self.screen.blit(self.guardian.image, self.guardian.rect)
-        self.screen.blit(self.runner.image, self.runner.rect)
 	for platform in self.platforms:
 		self.screen.blit(platform.image, platform.rect)
 	for ground in self.grounds:
 		self.screen.blit(ground.image, ground.rect)
+        for coin in self.coins:
+            if coin.rect.right > self.width:
+                tmp_rect = Rect(coin.rect)
+                tmp_rect.right = self.width
+                self.screen.blit(coin.image, tmp_rect)
+            else:
+                self.screen.blit(coin.image, coin.rect)
+        self.screen.blit(self.runner.image, self.runner.rect)
         pygame.display.flip()
 
     def move_background(self):
