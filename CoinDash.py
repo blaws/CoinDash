@@ -34,6 +34,7 @@ class CoinDash:
 	self.count = 1
 	self.gap = 0
 	self.score = 0
+        self.playJumpSound = False
 	self.font = pygame.font.Font(None, 72)
 	self.connectionFont = pygame.font.Font(None, 72)
         self.addcoin = -1

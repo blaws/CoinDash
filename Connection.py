@@ -50,6 +50,7 @@ class Connection(Protocol):
             self.gs.grounds = list(self.data[4])
             self.gs.addcoin = int(self.data[5])
             self.gs.addwiley = int(self.data[6])
+            self.gs.playJumpSound = bool(self.data[7])
             self.gs.runner.lock.release()
 
     def connectionLost(self, reason):
@@ -57,10 +58,11 @@ class Connection(Protocol):
 
     def sendUpdate(self):
         if self.connType == 0:
-            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.grounds, self.gs.addcoin, self.gs.addwiley]
+            self.data = [self.gs.runner.rect, self.gs.runner.currentframe, self.gs.runner.jumpheld, self.gs.runner.yvel, self.gs.grounds, self.gs.addcoin, self.gs.addwiley, self.gs.playJumpSound]
             self.gs.addground = 0
             self.gs.addcoin = -1
             self.gs.addwiley = -1
+            self.gs.playJumpSound = False
         else:
             self.data = [self.gs.guardian.rect, self.gs.guardian.xspeed, self.gs.guardian.yspeed, self.gs.guardian.addplatform]
             self.gs.newplatform = False

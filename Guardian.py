@@ -33,6 +33,10 @@ class Guardian(pygame.sprite.Sprite):
 
 	def tick(self):
 		self.lock.acquire()
+		if self.gs.side == 0 and self.gs.playJumpSound:
+			self.gs.jumpSound.play()
+			self.gs.playJumpSound = False
+
 		if self.addplatform:
 			if self.counter <= 0:
 				self.gs.platforms.append(Platform(self.gs))
