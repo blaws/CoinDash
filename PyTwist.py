@@ -13,6 +13,7 @@ from Runner import *
 from Connection import *
 from Platform import *
 from Wiley import *
+from Explosion import *
 
 class PyTwist:
     def __init__(self):
@@ -138,7 +139,26 @@ class PyTwist:
             self.bg_rect.left = self.width
 
     def gameover(self):
-	print "game over"
+	self.explosion = Explosion(self)
+	while self.explosion.animation != 15:
+		self.explosion.tick()
+		self.screen.blit(self.bg, self.bg_rect)
+		if self.bg_rect.right < self.width:
+		    self.screen.blit(self.reverse_bg, self.bg_rect.move(self.width, 0))
+		else:
+		    self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
+		self.screen.blit(self.guardian.image, self.guardian.rect)
+		for platform in self.platforms:
+			self.screen.blit(platform.image, platform.rect)
+		for ground in self.grounds:
+			self.screen.blit(ground.image, ground.rect)
+		for wiley in self.wileys:
+			self.screen.blit(wiley.image, wiley.rect)
+		text = self.font.render(str(self.score), 1, (10, 10, 10))
+		textpos = text.get_rect()
+		self.screen.blit(text, textpos)
+		self.screen.blit(self.explosion.image, self.explosion.rect)
+		pygame.display.flip()
 	reactor.stop()
 
 
