@@ -77,7 +77,7 @@ class Runner(pygame.sprite.Sprite):
     def input(self, event):
         if event.key == K_UP:
             if event.type == KEYDOWN and (self.rect.bottom >= self.gs.height or self.canJump == True):
-                self.playJumpSound = True
+                self.gs.playJumpSound = True
 		self.gs.jumpSound.play()
                 self.yvel = self.jumpvel
                 self.jumpheld = True
