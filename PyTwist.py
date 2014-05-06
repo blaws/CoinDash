@@ -32,6 +32,7 @@ class PyTwist:
 	self.gap = 0
 	self.score = 0
 	self.font = pygame.font.Font(None, 72)
+	self.connectionFont = pygame.font.Font(None, 72)
         self.addground = 0
         self.addcoin = -1
         self.addwiley = -1
@@ -163,6 +164,11 @@ class PyTwist:
 	text = self.font.render(str(self.score), 1, (10, 10, 10))
 	textpos = text.get_rect()
 	self.screen.blit(text, textpos)
+	if self.connection == None:
+		connectionText = self.connectionFont.render("WAITING FOR PLAYER 2", 1, (255, 0, 0))
+		connectionTextpos = connectionText.get_rect()
+		connectionTextpos.y = 140
+		self.screen.blit(connectionText, connectionTextpos)
         pygame.display.flip()
 
     def move_background(self):
