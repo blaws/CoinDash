@@ -139,6 +139,7 @@ class CoinDash:
 		self.count = 1
 		if (self.side == 0 and 0 != randint(0,9-self.difficulty) and self.gap == 0) or self.connection == None or self.gap == 4:
 			self.grounds.append(Ground(640, 360))
+			self.gap = 0
 		elif self.side == 0:
 			self.gap += 1
 

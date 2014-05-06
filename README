@@ -1,6 +1,8 @@
-PyTwist
+CoinDash
 =======
 blaws
 amarti36
 
 Asymmetric two-player (networked) runner game, written in Python. Uses PyGame and Twisted.
+
+To begin gameplay as player 1 type "python CoinDash.py runner <portnumber>". Once a window is opened you should see text that says waiting for player 2. Wait for another player to connect as player 2. To connect as player 2 type "python CoinDash.py guardian <portnumber> <hostname of runner>". As soon as player 2 connects the text will dissapear and gameplay will begin. Gaps will start appearing where there was ground. Wileys on jet packs and coins will also start spawning. To dodge these the road runner (player 1) must jump over them! To make the road runner jump player 1 can press the up arrow button. However sometimes the road runners jump will not be enough. Player 2 can move a platform marker with his arrow keys. If he presses the return key player 2 will spawn platforms into existance to help the road runner collect coins. The difficulty increases as the road runner collects more coins. If the road runner touches a wiley, spikes, or falls into a hole it's game over.
