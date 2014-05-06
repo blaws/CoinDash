@@ -48,7 +48,7 @@ class Runner(pygame.sprite.Sprite):
 
 	#platform
 	for platform in self.gs.platforms:
-		if self.rect.colliderect(platform.rect) and abs(self.rect.bottom - platform.rect.top) <= 8:
+		if self.rect.colliderect(platform.rect) and abs(self.rect.bottom - platform.rect.top) <= 8 and self.yvel < 0:
 		    self.yvel = 0
 		    self.canJump = True
 		if platform.rect.x <= -40:
