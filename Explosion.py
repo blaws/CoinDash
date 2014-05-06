@@ -11,12 +11,13 @@ class Explosion(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.x = self.gs.runner.rect.x + 15
 		self.y = self.gs.runner.rect.y
-		if self.y >= 600:
-			self.y = 600
+		print self.y
+		if self.y >= 400:
+			self.y = 400
 		self.rect = self.rect.move(self.x, self.y)
 
 	def tick(self):
-		if self.count == 30:
+		if self.count == 15:
 			self.animation += 1
 			self.image = pygame.image.load("images/Explosion" + str(self.animation) + ".png")
 			self.count = 0
