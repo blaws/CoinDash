@@ -1,6 +1,6 @@
-# PyTwist
+# CoinDash
 # blaws, amarti36
-# PyTwist.py
+# CoinDash.py
 
 import sys
 from random import randint
