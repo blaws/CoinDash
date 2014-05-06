@@ -25,3 +25,5 @@ class Wiley(pygame.sprite.Sprite):
 			self.image = pygame.image.load("images/Wiley3.png")
 		elif self.animation == 6:
 			self.image = pygame.image.load("images/Wiley4.png")
+		if self.rect.x <= -100:
+			del self.gs.wileys[self.gs.wileys.index(self)]
