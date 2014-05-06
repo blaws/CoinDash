@@ -12,9 +12,6 @@ from Guardian import *
 from Runner import *
 from Connection import *
 from Platform import *
-from Coin import *
-from Wiley import *
-from Explosion import *
 
 class PyTwist:
     def __init__(self):
@@ -29,10 +26,12 @@ class PyTwist:
         self.bg_speed = 4
 	self.count = 1
 	self.gap = 0
+<<<<<<< HEAD
 	self.score = 0
 	self.font = pygame.font.Font(None, 72)
+=======
         self.addground = 0
-        self.addcoin = -1
+>>>>>>> bfb03bcc8d78b029661168f5ab473dae14db7e33
         pygame.display.set_caption('PyTwist')
 
         # create game objects
@@ -40,7 +39,6 @@ class PyTwist:
         self.runner = Runner(self)
 	self.guardian = Guardian(self)
 	self.platforms = list()
-	self.wileys = list()
         self.newplatform = False
 	self.grounds = list()
 	self.grounds.append(Ground(self, 0, 360))
@@ -50,7 +48,6 @@ class PyTwist:
 	self.grounds.append(Ground(self, 480, 360))
 	self.grounds.append(Ground(self, 600, 360))
 	self.grounds.append(Ground(self, 720, 360))
-        self.coins = list()
 
     def connect(self, side, port, addr=None):
         self.side = side
@@ -87,23 +84,10 @@ class PyTwist:
         self.guardian.tick()
 	for platform in self.platforms:
 		platform.tick()
-	for wiley in self.wileys:
-		wiley.tick()
-		if wiley.rect.x <= -100:
-			del self.wileys[self.wileys.index(wiley)]
-			
 	for ground in self.grounds:
 		ground.tick()
 		if ground.rect.x <= -120:
 			del self.grounds[0]
-        if self.connection and self.side == 0 and randint(0,500) == 0:
-            self.addcoin = randint(0, self.height)
-            self.coins.append(Coin(self, self.addcoin))
-        if self.connection and self.side == 1 and self.addcoin > -1:
-            self.coins.append(Coin(self, self.addcoin))
-            self.addcoin = -1
-        for coin in self.coins:
-            coin.tick()
         self.move_background()
 	self.count += 1
 	if self.count == 24:
@@ -117,9 +101,11 @@ class PyTwist:
                         self.addground = 2
 		else:
 			self.gap += 1
+<<<<<<< HEAD
+	
+=======
                         self.addground = 0
-	if 1 == randint(0, 300) and self.connection != None:
-		self.wileys.append(Wiley(self))
+>>>>>>> bfb03bcc8d78b029661168f5ab473dae14db7e33
 
         # update other player
         if self.connection:
@@ -132,20 +118,11 @@ class PyTwist:
         else:
             self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
         self.screen.blit(self.guardian.image, self.guardian.rect)
+        self.screen.blit(self.runner.image, self.runner.rect)
 	for platform in self.platforms:
 		self.screen.blit(platform.image, platform.rect)
 	for ground in self.grounds:
 		self.screen.blit(ground.image, ground.rect)
-        for coin in self.coins:
-            if coin.rect.right > self.width:
-                tmp_rect = Rect(coin.rect)
-                tmp_rect.right = self.width
-                self.screen.blit(coin.image, tmp_rect)
-            else:
-                self.screen.blit(coin.image, coin.rect)
-        self.screen.blit(self.runner.image, self.runner.rect)
-	for wiley in self.wileys:
-		self.screen.blit(wiley.image, wiley.rect)
 	text = self.font.render(str(self.score), 1, (10, 10, 10))
 	textpos = text.get_rect()
 	self.screen.blit(text, textpos)
@@ -157,26 +134,7 @@ class PyTwist:
             self.bg_rect.left = self.width
 
     def gameover(self):
-	self.explosion = Explosion(self)
-	while self.explosion.animation != 15:
-		self.explosion.tick()
-		self.screen.blit(self.bg, self.bg_rect)
-		if self.bg_rect.right < self.width:
-		    self.screen.blit(self.reverse_bg, self.bg_rect.move(self.width, 0))
-		else:
-		    self.screen.blit(self.reverse_bg, self.bg_rect.move(-self.width, 0))
-		self.screen.blit(self.guardian.image, self.guardian.rect)
-		for platform in self.platforms:
-			self.screen.blit(platform.image, platform.rect)
-		for ground in self.grounds:
-			self.screen.blit(ground.image, ground.rect)
-		for wiley in self.wileys:
-			self.screen.blit(wiley.image, wiley.rect)
-		text = self.font.render(str(self.score), 1, (10, 10, 10))
-		textpos = text.get_rect()
-		self.screen.blit(text, textpos)
-		self.screen.blit(self.explosion.image, self.explosion.rect)
-		pygame.display.flip()
+	print "game over"
 	reactor.stop()
 
 
