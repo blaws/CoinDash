@@ -69,7 +69,6 @@ class CoinDash:
 
     def printerror(self, error):
         print error
-        reactor.stop()
 
     def start(self):
         self.gameloop = LoopingCall(self.main).start(1/float(60))
@@ -101,33 +100,15 @@ class CoinDash:
 		ground.tick()
 		if ground.rect.right < -120:  # can't be in Ground.tick() because Ground cannot have a reference to the gamespace (because of pickling)
                     del self.grounds[self.grounds.index(ground)]
-        if self.connection and self.side == 0 and randint(0,100) == 0:
-            self.addcoin = randint(0, self.height-150)
-            self.coins.append(Coin(self, self.addcoin))
-        elif self.connection and self.side == 1 and self.addcoin > -1:
-            self.coins.append(Coin(self, self.addcoin))
-            self.addcoin = -1
+        self.addCoin()
         for coin in self.coins:
             coin.tick()
+        self.addGround()
+        self.addWiley()
         self.move_background()
-	self.count += 1
-	if self.count == 24:
-		self.count = 1
-		if (self.side == 0 and 0 != randint(0,9-self.difficulty) and self.gap == 0) or self.connection == None or self.gap == 4:
-			self.grounds.append(Ground(640, 360))
-#                        self.groundrects.append(self.grounds[-1].rect)
-		elif self.side == 0:
-			self.gap += 1
-	if 1 == randint(0, 600-self.difficulty*60) and self.connection != None and self.side == 0:
-            self.addwiley = randint(0, self.height-150)
-            self.wileys.append(Wiley(self, self.addwiley))
-        elif self.connection and self.side == 1 and self.addwiley > -1:
-            self.wileys.append(Wiley(self, self.addwiley))
-            self.addwiley = -1
         self.difficulty = self.score / 10
         if self.difficulty > 9:
             self.difficulty = 9
-
 
         # update other player
         if self.connection:
@@ -143,6 +124,31 @@ class CoinDash:
 	self.blit_wileys()
 	self.blit_text()
         pygame.display.flip()
+
+    def addCoin(self):
+        if self.connection and self.side == 0 and randint(0,100) == 0:
+            self.addcoin = randint(0, self.height-150)
+            self.coins.append(Coin(self, self.addcoin))
+        elif self.connection and self.side == 1 and self.addcoin > -1:
+            self.coins.append(Coin(self, self.addcoin))
+            self.addcoin = -1
+
+    def addGround(self):
+	self.count += 1
+	if self.count == 24:
+		self.count = 1
+		if (self.side == 0 and 0 != randint(0,9-self.difficulty) and self.gap == 0) or self.connection == None or self.gap == 4:
+			self.grounds.append(Ground(640, 360))
+		elif self.side == 0:
+			self.gap += 1
+
+    def addWiley(self):
+	if 1 == randint(0, 600-self.difficulty*60) and self.connection != None and self.side == 0:
+            self.addwiley = randint(0, self.height-150)
+            self.wileys.append(Wiley(self, self.addwiley))
+        elif self.connection and self.side == 1 and self.addwiley > -1:
+            self.wileys.append(Wiley(self, self.addwiley))
+            self.addwiley = -1
 
     def move_background(self):
         self.bg_rect = self.bg_rect.move(-self.bg_speed, 0)
@@ -166,7 +172,6 @@ class CoinDash:
 	while self.explosion.animation != 15:
 		self.explosion.tick()
 		
-
 		self.blit_bg()
 		self.screen.blit(self.guardian.image, self.guardian.rect)
 		for platform in self.platforms:
@@ -226,16 +231,21 @@ class CoinDash:
 		connectionTextpos.y = 140
 		self.screen.blit(connectionText, connectionTextpos)
 
+
 if __name__ == '__main__':
+    # check input: python CoinDash.py <runner/guardian> <port> <hostname (guardian only)>
     if (len(sys.argv)!=3 and len(sys.argv)!=4) or (sys.argv[1].lower()!='runner' and sys.argv[1].lower()!='guardian'):
         print 'usage: python '+sys.argv[0]+' <runner/guardian> <port> <hostname (guardian only)>'
         sys.exit(1)
 
+    # instantiate game object
     cd = CoinDash()
 
+    # set up connection to other player
     if sys.argv[1].lower() == 'runner':
         cd.connect(0, int(sys.argv[2]))
     elif sys.argv[1].lower() == 'guardian' and len(sys.argv) > 3:
         cd.connect(1, int(sys.argv[2]), sys.argv[3])
 
+    # play!
     cd.start()
