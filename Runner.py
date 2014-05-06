@@ -57,7 +57,9 @@ class Runner(pygame.sprite.Sprite):
 	#wiley
 	for wiley in self.gs.wileys:
 		if self.rect.colliderect(wiley.rect):
-			self.gs.gameover()
+			if abs(self.rect.centerx - wiley.rect.centerx) <= 75: #105 is max
+				if abs (self.rect.centery - wiley.rect.centery) <= 50: #70 is max
+					self.gs.gameover()
 
 	#coin
 	for coin in self.gs.coins:
