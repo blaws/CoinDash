@@ -1,6 +1,6 @@
-# PyTwist
+# CoinDash
 # blaws, amarti36
-# PyTwist.py
+# Connection.py
 
 import pygame
 from pygame.locals import *
